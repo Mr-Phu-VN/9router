@@ -1,0 +1,1 @@
+docker build -t 10.79.60.23:8010/9router:0.5.15 .

@@ -76,6 +76,19 @@ const REFRESH_GRANTS = Object.fromEntries(
     })
 );
 
+function ensureSingleHeader(headers, name, fallbackValue) {
+  const lowerName = name.toLowerCase();
+  let value = headers[name];
+
+  for (const key of Object.keys(headers)) {
+    if (key.toLowerCase() !== lowerName) continue;
+    if (value === undefined) value = headers[key];
+    if (key !== name) delete headers[key];
+  }
+
+  headers[name] = value ?? fallbackValue;
+}
+
 export class DefaultExecutor extends BaseExecutor {
   constructor(provider) {
     super(provider, PROVIDERS[provider] || PROVIDERS.openai);
@@ -202,6 +215,9 @@ export class DefaultExecutor extends BaseExecutor {
     }
 
     if (stream) headers["Accept"] = "text/event-stream";
+    
+    ensureSingleHeader(headers, "anthropic-version", "2023-06-01");
+    
     return headers;
   }
 
