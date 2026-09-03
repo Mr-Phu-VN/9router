@@ -542,8 +542,9 @@ export function parseQuotaData(provider, data) {
         }
         break;
 
-      case "kimi-custom":
-        // USD balances (available/voucher/cash) — remainingPercentage only.
+      case "groq":
+        // Requests/Tokens rate-limit windows from response headers — absolute
+        // used/total (calculatePercentage derives the bar), like Codex/Kiro.
         if (data.quotas) {
           Object.entries(data.quotas).forEach(([name, quota]) => {
             normalizedQuotas.push({
@@ -551,8 +552,6 @@ export function parseQuotaData(provider, data) {
               used: quota.used || 0,
               total: quota.total || 0,
               resetAt: quota.resetAt || null,
-              remainingPercentage: quota.remainingPercentage,
-              unlimited: quota.unlimited,
             });
           });
         }
@@ -576,6 +575,22 @@ export function parseQuotaData(provider, data) {
 
       case "zed":
         // Edit predictions + optional hosted model_requests; unlimited uses remainingPercentage.
+        if (data.quotas) {
+          Object.entries(data.quotas).forEach(([name, quota]) => {
+            normalizedQuotas.push({
+              name,
+              used: quota.used || 0,
+              total: quota.total || 0,
+              resetAt: quota.resetAt || null,
+              remainingPercentage: quota.remainingPercentage,
+              unlimited: quota.unlimited,
+            });
+          });
+        }
+        break;
+
+      case "kimi-custom":
+        // USD balances (available/voucher/cash) — remainingPercentage only.
         if (data.quotas) {
           Object.entries(data.quotas).forEach(([name, quota]) => {
             normalizedQuotas.push({
