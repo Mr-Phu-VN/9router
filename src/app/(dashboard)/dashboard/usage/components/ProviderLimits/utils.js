@@ -542,6 +542,22 @@ export function parseQuotaData(provider, data) {
         }
         break;
 
+      case "kimi-custom":
+        // USD balances (available/voucher/cash) — remainingPercentage only.
+        if (data.quotas) {
+          Object.entries(data.quotas).forEach(([name, quota]) => {
+            normalizedQuotas.push({
+              name,
+              used: quota.used || 0,
+              total: quota.total || 0,
+              resetAt: quota.resetAt || null,
+              remainingPercentage: quota.remainingPercentage,
+              unlimited: quota.unlimited,
+            });
+          });
+        }
+        break;
+
       case "ollama":
         // Session (5h) / Weekly (7d) usage % from ollama.com/api/usage.
         // remainingPercentage only — no absolute remaining (UI treats remaining as %).

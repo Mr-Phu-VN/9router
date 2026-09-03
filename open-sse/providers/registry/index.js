@@ -53,6 +53,7 @@ import p50 from "./jina-reader.js";
 import p51 from "./kilocode.js";
 import p52 from "./kimchi.js";
 import p53 from "./kimi.js";
+import p124 from "./kimi-custom.js";
 import p54 from "./kiro.js";
 import p55 from "./linkup.js";
 import p56 from "./local-device.js";
@@ -179,6 +180,7 @@ export default [
   p51,
   p52,
   p53,
+  p124,
   p54,
   p55,
   p56,
